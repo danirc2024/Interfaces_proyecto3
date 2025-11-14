@@ -1,0 +1,3 @@
+# datasource.yaml
+# Configuración de fuente de datos para Grafana
+# TODO: Configurar según la fuente de datos elegida (InfluxDB, Prometheus, etc.)

@@ -1,0 +1,11 @@
+{
+  "name": "dashboard-ambiental-nodered",
+  "version": "1.0.0",
+  "description": "NodeRed Dashboard para monitoreo ambiental - Estoy Frito Ltda",
+  "dependencies": {
+    "node-red-dashboard": "^3.5.0",
+    "node-red-contrib-mqtt-broker": "^0.2.5"
+  },
+  "author": "Equipo Interfaces",
+  "license": "MIT"
+}

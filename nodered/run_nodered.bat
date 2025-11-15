@@ -28,7 +28,8 @@ echo.
 echo Presiona Ctrl+C para detener NodeRed
 echo.
 
-REM Iniciar NodeRed usando este directorio como userDir
-node-red --userDir "%~dp0"
+REM Navegar al directorio actual y ejecutar sin comillas
+cd /d "%~dp0"
+node-red --userDir ./
 
 pause

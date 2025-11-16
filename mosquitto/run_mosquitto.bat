@@ -4,7 +4,7 @@ echo   Iniciando Mosquitto Broker
 echo ====================================
 echo.
 
-REM Verificar si Mosquitto está instalado
+REM 
 where mosquitto >nul 2>nul
 if %ERRORLEVEL% NEQ 0 (
     echo ERROR: Mosquitto no esta instalado
@@ -13,7 +13,7 @@ if %ERRORLEVEL% NEQ 0 (
     exit /b 1
 )
 
-REM Crear directorio de datos si no existe
+REM 
 if not exist "data" mkdir data
 
 echo Iniciando broker en puerto 1883...

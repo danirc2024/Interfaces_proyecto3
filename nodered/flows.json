@@ -1,1 +1,760 @@
-[{"id":"767d56b41dd06e6b","type":"tab","label":"Flujo 1","disabled":false,"info":"","env":[]},{"id":"85340e282e10bbff","type":"ui_base","theme":{"name":"theme-light","lightTheme":{"default":"#0094CE","baseColor":"#0094CE","baseFont":"-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen-Sans,Ubuntu,Cantarell,Helvetica Neue,sans-serif","edited":true,"reset":false},"darkTheme":{"default":"#097479","baseColor":"#097479","baseFont":"-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen-Sans,Ubuntu,Cantarell,Helvetica Neue,sans-serif","edited":false},"customTheme":{"name":"Untitled Theme 1","default":"#4B7930","baseColor":"#4B7930","baseFont":"-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen-Sans,Ubuntu,Cantarell,Helvetica Neue,sans-serif"},"themeState":{"base-color":{"default":"#0094CE","value":"#0094CE","edited":false},"page-titlebar-backgroundColor":{"value":"#0094CE","edited":false},"page-backgroundColor":{"value":"#fafafa","edited":false},"page-sidebar-backgroundColor":{"value":"#ffffff","edited":false},"group-textColor":{"value":"#1bbfff","edited":false},"group-borderColor":{"value":"#ffffff","edited":false},"group-backgroundColor":{"value":"#ffffff","edited":false},"widget-textColor":{"value":"#111111","edited":false},"widget-backgroundColor":{"value":"#0094ce","edited":false},"widget-borderColor":{"value":"#ffffff","edited":false},"base-font":{"value":"-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen-Sans,Ubuntu,Cantarell,Helvetica Neue,sans-serif"}},"angularTheme":{"primary":"indigo","accents":"blue","warn":"red","background":"grey","palette":"light"}},"site":{"name":"Node-RED Dashboard","hideToolbar":"false","allowSwipe":"false","lockMenu":"false","allowTempTheme":"true","dateFormat":"DD/MM/YYYY","sizes":{"sx":48,"sy":48,"gx":6,"gy":6,"cx":6,"cy":6,"px":0,"py":0}}},{"id":"8e36dcab05ad11db","type":"ui_tab","name":"Monitor calidad del aire","icon":"dashboard","order":1,"disabled":false,"hidden":false},{"id":"292756bfd1135cd9","type":"ui_group","name":"Calidad del aire","tab":"8e36dcab05ad11db","order":1,"disp":true,"width":"5","collapse":false,"className":""},{"id":"2c1dc4b21d6e4f65","type":"ui_group","name":"Ambiente","tab":"8e36dcab05ad11db","order":2,"disp":true,"width":6,"collapse":false,"className":""},{"id":"3390b419168eaa1e","type":"ui_group","name":"Ajustes","tab":"8e36dcab05ad11db","order":3,"disp":true,"width":6,"collapse":false,"className":""},{"id":"2787a51e90a70bb6","type":"http in","z":"767d56b41dd06e6b","name":"recibir_http_post","url":"/dUMA","method":"post","upload":false,"skipBodyParsing":false,"swaggerDoc":"","x":200,"y":200,"wires":[["70fdb9c66dad7ed1"]]},{"id":"70fdb9c66dad7ed1","type":"function","z":"767d56b41dd06e6b","name":"procesar_json_entrante","func":"// Convertir el JSON de texto a objeto JavaScript\nvar datos_crudos = msg.payload;\n\n// Si viene como texto, convertirlo a objeto\nif (typeof datos_crudos === 'string') {\n    try {\n        msg.payload = JSON.parse(datos_crudos);\n    } catch (error) {\n        node.error(\"Error parseando JSON: \" + error);\n        return null;\n    }\n}\n\n// Agregar timestamp\nmsg.timestamp = new Date();\n\n// Cambiar el nombre para claridad\nmsg.datos = msg.payload;\n\nnode.log(\"Datos recibidos correctamente\");\nreturn msg;","outputs":1,"timeout":0,"noerr":0,"initialize":"","finalize":"","libs":[],"x":410,"y":260,"wires":[["2f463929f6742061","0e808ab490569d0a","da85a8583cd9ceea","eeda1e03b7799f35","16cb1bda27eb2f0e"]]},{"id":"156c2c406a653820","type":"ui_gauge","z":"767d56b41dd06e6b","name":"","group":"2c1dc4b21d6e4f65","order":0,"width":0,"height":0,"gtype":"gage","title":"Temperatura","label":"°C","format":"{{value}}","min":0,"max":"40","colors":["#00b500","#e6e600","#ca3838"],"seg1":"","seg2":"","diff":false,"className":"","x":1010,"y":240,"wires":[]},{"id":"2f463929f6742061","type":"http response","z":"767d56b41dd06e6b","name":"responder_ok","statusCode":"200","headers":{},"x":720,"y":140,"wires":[]},{"id":"98a7a08f7d96fbeb","type":"ui_gauge","z":"767d56b41dd06e6b","name":"","group":"2c1dc4b21d6e4f65","order":1,"width":0,"height":0,"gtype":"gage","title":"Humedad","label":"units","format":"{{msg.payload}}%","min":0,"max":10,"colors":["#00b500","#e6e600","#ca3838"],"seg1":"","seg2":"","diff":false,"className":"","x":1000,"y":300,"wires":[]},{"id":"25f85dcd90e92844","type":"ui_gauge","z":"767d56b41dd06e6b","name":"","group":"2c1dc4b21d6e4f65","order":2,"width":0,"height":0,"gtype":"gage","title":"Presion","label":"units","format":"{{msg.payload}} hPa","min":0,"max":10,"colors":["#00b500","#e6e600","#ca3838"],"seg1":"","seg2":"","diff":false,"className":"","x":1000,"y":360,"wires":[]},{"id":"0e808ab490569d0a","type":"function","z":"767d56b41dd06e6b","name":"extraer_temperatura","func":"msg.payload = msg.datos.te;\nreturn msg;","outputs":1,"timeout":0,"noerr":0,"initialize":"","finalize":"","libs":[],"x":780,"y":240,"wires":[["156c2c406a653820"]]},{"id":"da85a8583cd9ceea","type":"function","z":"767d56b41dd06e6b","name":"extraer_humedad","func":"msg.payload = msg.datos.hr;\nreturn msg;","outputs":1,"timeout":0,"noerr":0,"initialize":"","finalize":"","libs":[],"x":770,"y":300,"wires":[["98a7a08f7d96fbeb"]]},{"id":"eeda1e03b7799f35","type":"function","z":"767d56b41dd06e6b","name":"extraer_presion","func":"msg.payload = msg.datos.pa;\nreturn msg;","outputs":1,"timeout":0,"noerr":0,"initialize":"","finalize":"","libs":[],"x":760,"y":360,"wires":[["25f85dcd90e92844"]]},{"id":"d39e719010fa64bd","type":"ui_gauge","z":"767d56b41dd06e6b","name":"","group":"292756bfd1135cd9","order":1,"width":0,"height":0,"gtype":"gage","title":"IAQ Index","label":"units","format":"{{value}}","min":0,"max":"250","colors":["#00b500","#e6e600","#ca3838"],"seg1":"85","seg2":"170","diff":false,"className":"","x":1180,"y":420,"wires":[]},{"id":"16cb1bda27eb2f0e","type":"function","z":"767d56b41dd06e6b","name":"extraer_iaq_index","func":"var iaq = (msg.datos.p01 + msg.datos.p25 + msg.datos.p10) / 3;\nmsg.payload = iaq;\nreturn msg;","outputs":1,"timeout":0,"noerr":0,"initialize":"","finalize":"","libs":[],"x":770,"y":420,"wires":[["d39e719010fa64bd","ed3130c90a0d23bf"]]},{"id":"ed3130c90a0d23bf","type":"function","z":"767d56b41dd06e6b","name":"determinar_calidad","func":"// Determinar estado de calidad basado en IAQ\nvar iaq = msg.payload; // Del gauge IAQ\n\nif (iaq < 50) {\n    msg.estado = \"good\";\n    msg.color = \"#00B500\";\n} else if (iaq < 100) {\n    msg.estado = \"moderate\"; \n    msg.color = \"#E6E600\";\n} else {\n    msg.estado = \"low\";\n    msg.color = \"#CA3838\";\n}\n\nreturn msg;","outputs":1,"timeout":0,"noerr":0,"initialize":"","finalize":"","libs":[],"x":1010,"y":480,"wires":[["c9e98104a4ad9aef"]]},{"id":"28b2831d99cb4a6a","type":"ui_numeric","z":"767d56b41dd06e6b","name":"","label":"Callback Period (ms)","tooltip":"","group":"3390b419168eaa1e","order":0,"width":0,"height":0,"wrap":false,"passthru":true,"topic":"topic","topicType":"msg","format":"{{10000}}","min":"1000","max":"60000","step":1,"className":"","x":1040,"y":660,"wires":[[]]},{"id":"2bdc053d40e23529","type":"ui_button","z":"767d56b41dd06e6b","name":"","group":"3390b419168eaa1e","order":1,"width":0,"height":0,"passthru":false,"label":"Limpiar","tooltip":"","color":"","bgcolor":"","className":"","icon":"","payload":"","payloadType":"str","topic":"limpiar_graficos","topicType":"msg","x":740,"y":560,"wires":[["0d83631b0995a678"]]},{"id":"9b7eb4379b107338","type":"ui_chart","z":"767d56b41dd06e6b","name":"","group":"3390b419168eaa1e","order":2,"width":0,"height":0,"label":"Temperatura historica","chartType":"line","legend":"false","xformat":"HH:mm:ss","interpolate":"linear","nodata":"","dot":false,"ymin":"","ymax":"","removeOlder":1,"removeOlderPoints":"","removeOlderUnit":"3600","cutout":0,"useOneColor":false,"useUTC":false,"colors":["#1f77b4","#aec7e8","#ff7f0e","#2ca02c","#98df8a","#d62728","#ff9896","#9467bd","#c5b0d5"],"outputs":1,"useDifferentColor":false,"className":"","x":780,"y":660,"wires":[[]]},{"id":"c9e98104a4ad9aef","type":"ui_text","z":"767d56b41dd06e6b","group":"292756bfd1135cd9","order":3,"width":0,"height":0,"name":"","label":"Estado","format":"{{msg.estado}}","layout":"row-center","className":"","style":false,"font":"","fontSize":16,"color":"#000000","x":1220,"y":480,"wires":[]},{"id":"0d83631b0995a678","type":"function","z":"767d56b41dd06e6b","name":"procesar_limpiar","func":"\nmsg.payload = \"limpiar\";\nmsg.topic = \"reset_graficos\";\nnode.log(\"Solicitando limpieza de gráficos\");\nreturn msg;","outputs":1,"timeout":0,"noerr":0,"initialize":"","finalize":"","libs":[],"x":980,"y":560,"wires":[[]]},{"id":"cea2f79806a0c6cf","type":"ui_chart","z":"767d56b41dd06e6b","name":"","group":"292756bfd1135cd9","order":2,"width":0,"height":0,"label":"","chartType":"line","legend":"true","xformat":"HH:mm","interpolate":"linear","nodata":"","dot":false,"ymin":"0","ymax":"70","removeOlder":1,"removeOlderPoints":"","removeOlderUnit":"3600","cutout":0,"useOneColor":true,"useUTC":false,"colors":["#1f77b4","#aec7e8","#ff7f0e","#2ca02c","#98df8a","#d62728","#ff9896","#9467bd","#c5b0d5"],"outputs":1,"useDifferentColor":false,"className":"","x":1210,"y":560,"wires":[[]]}]
+[
+    {
+        "id": "d19b657d65c9ef07",
+        "type": "tab",
+        "label": "Flujo 1",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "85340e282e10bbff",
+        "type": "ui_base",
+        "theme": {
+            "name": "theme-light",
+            "lightTheme": {
+                "default": "#0094CE",
+                "baseColor": "#0094CE",
+                "baseFont": "-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen-Sans,Ubuntu,Cantarell,Helvetica Neue,sans-serif",
+                "edited": true,
+                "reset": false
+            },
+            "darkTheme": {
+                "default": "#097479",
+                "baseColor": "#097479",
+                "baseFont": "-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen-Sans,Ubuntu,Cantarell,Helvetica Neue,sans-serif",
+                "edited": false
+            },
+            "customTheme": {
+                "name": "Untitled Theme 1",
+                "default": "#4B7930",
+                "baseColor": "#4B7930",
+                "baseFont": "-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen-Sans,Ubuntu,Cantarell,Helvetica Neue,sans-serif"
+            },
+            "themeState": {
+                "base-color": {
+                    "default": "#0094CE",
+                    "value": "#0094CE",
+                    "edited": false
+                },
+                "page-titlebar-backgroundColor": {
+                    "value": "#0094CE",
+                    "edited": false
+                },
+                "page-backgroundColor": {
+                    "value": "#fafafa",
+                    "edited": false
+                },
+                "page-sidebar-backgroundColor": {
+                    "value": "#ffffff",
+                    "edited": false
+                },
+                "group-textColor": {
+                    "value": "#1bbfff",
+                    "edited": false
+                },
+                "group-borderColor": {
+                    "value": "#ffffff",
+                    "edited": false
+                },
+                "group-backgroundColor": {
+                    "value": "#ffffff",
+                    "edited": false
+                },
+                "widget-textColor": {
+                    "value": "#111111",
+                    "edited": false
+                },
+                "widget-backgroundColor": {
+                    "value": "#0094ce",
+                    "edited": false
+                },
+                "widget-borderColor": {
+                    "value": "#ffffff",
+                    "edited": false
+                },
+                "base-font": {
+                    "value": "-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen-Sans,Ubuntu,Cantarell,Helvetica Neue,sans-serif"
+                }
+            },
+            "angularTheme": {
+                "primary": "indigo",
+                "accents": "blue",
+                "warn": "red",
+                "background": "grey",
+                "palette": "light"
+            }
+        },
+        "site": {
+            "name": "Node-RED Dashboard",
+            "hideToolbar": "false",
+            "allowSwipe": "false",
+            "lockMenu": "false",
+            "allowTempTheme": "true",
+            "dateFormat": "DD/MM/YYYY",
+            "sizes": {
+                "sx": 48,
+                "sy": 48,
+                "gx": 6,
+                "gy": 6,
+                "cx": 6,
+                "cy": 6,
+                "px": 0,
+                "py": 0
+            }
+        }
+    },
+    {
+        "id": "8e36dcab05ad11db",
+        "type": "ui_tab",
+        "name": "Monitor calidad del aire",
+        "icon": "dashboard",
+        "order": 1,
+        "disabled": false,
+        "hidden": false
+    },
+    {
+        "id": "292756bfd1135cd9",
+        "type": "ui_group",
+        "name": "Calidad del aire",
+        "tab": "8e36dcab05ad11db",
+        "order": 1,
+        "disp": true,
+        "width": "8",
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "2c1dc4b21d6e4f65",
+        "type": "ui_group",
+        "name": "Ambiente",
+        "tab": "8e36dcab05ad11db",
+        "order": 2,
+        "disp": true,
+        "width": "12",
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "3390b419168eaa1e",
+        "type": "ui_group",
+        "name": "Ajustes",
+        "tab": "8e36dcab05ad11db",
+        "order": 3,
+        "disp": true,
+        "width": "8",
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "fa9f1f04f8aa5f95",
+        "type": "http in",
+        "z": "d19b657d65c9ef07",
+        "name": "recibir_http_post",
+        "url": "/dUMA",
+        "method": "post",
+        "upload": false,
+        "skipBodyParsing": false,
+        "swaggerDoc": "",
+        "x": 200,
+        "y": 200,
+        "wires": [
+            [
+                "b8fe9e8d558e644f"
+            ]
+        ]
+    },
+    {
+        "id": "b8fe9e8d558e644f",
+        "type": "function",
+        "z": "d19b657d65c9ef07",
+        "name": "procesar_json_entrante",
+        "func": "// Convertir el JSON de texto a objeto JavaScript\nvar datos_crudos = msg.payload;\n\n// Si viene como texto, convertirlo a objeto\nif (typeof datos_crudos === 'string') {\n    try {\n        msg.payload = JSON.parse(datos_crudos);\n    } catch (error) {\n        node.error(\"Error parseando JSON: \" + error);\n        return null;\n    }\n}\n\n// Agregar timestamp\nmsg.timestamp = new Date();\n\n// Cambiar el nombre para claridad\nmsg.datos = msg.payload;\n\nnode.log(\"Datos recibidos correctamente\");\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 410,
+        "y": 260,
+        "wires": [
+            [
+                "8c7a7ef9b11525f6",
+                "61b64271b0facbde",
+                "b0f54c94f7288462",
+                "e8a7aac38620a15a",
+                "0597cdfce1c7ba0b"
+            ]
+        ]
+    },
+    {
+        "id": "4bc58f23f38f3f45",
+        "type": "ui_gauge",
+        "z": "d19b657d65c9ef07",
+        "name": "Temperatura",
+        "group": "2c1dc4b21d6e4f65",
+        "order": 1,
+        "width": "4",
+        "height": "4",
+        "gtype": "gage",
+        "title": "Temperatura",
+        "label": "°C",
+        "format": "{{value}}",
+        "min": 0,
+        "max": "40",
+        "colors": [
+            "#62a0ea",
+            "#f6d32d",
+            "#ff7800"
+        ],
+        "seg1": "18",
+        "seg2": "28",
+        "diff": false,
+        "className": "",
+        "x": 1050,
+        "y": 180,
+        "wires": []
+    },
+    {
+        "id": "8c7a7ef9b11525f6",
+        "type": "http response",
+        "z": "d19b657d65c9ef07",
+        "name": "responder_ok",
+        "statusCode": "200",
+        "headers": {},
+        "x": 720,
+        "y": 140,
+        "wires": []
+    },
+    {
+        "id": "b43d9b74117b70ad",
+        "type": "ui_gauge",
+        "z": "d19b657d65c9ef07",
+        "name": "Humedad",
+        "group": "2c1dc4b21d6e4f65",
+        "order": 2,
+        "width": "4",
+        "height": "4",
+        "gtype": "gage",
+        "title": "Humedad",
+        "label": "%",
+        "format": "{{value}}",
+        "min": 0,
+        "max": "100",
+        "colors": [
+            "#ca3838",
+            "#62a0ea",
+            "#ca3838"
+        ],
+        "seg1": "30",
+        "seg2": "70",
+        "diff": false,
+        "className": "",
+        "x": 1140,
+        "y": 260,
+        "wires": []
+    },
+    {
+        "id": "cfe428017e25abf2",
+        "type": "ui_gauge",
+        "z": "d19b657d65c9ef07",
+        "name": "Presión",
+        "group": "2c1dc4b21d6e4f65",
+        "order": 3,
+        "width": "4",
+        "height": "4",
+        "gtype": "gage",
+        "title": "Presion",
+        "label": "hPa",
+        "format": "{{value}}",
+        "min": "880",
+        "max": "920",
+        "colors": [
+            "#ca3838",
+            "#62a0ea",
+            "#ca3838"
+        ],
+        "seg1": "895",
+        "seg2": "905",
+        "diff": false,
+        "className": "",
+        "x": 1140,
+        "y": 340,
+        "wires": []
+    },
+    {
+        "id": "61b64271b0facbde",
+        "type": "function",
+        "z": "d19b657d65c9ef07",
+        "name": "extraer_temperatura",
+        "func": "msg.payload = msg.datos.te;\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 780,
+        "y": 240,
+        "wires": [
+            [
+                "4bc58f23f38f3f45",
+                "475eb6dc47a98dd4"
+            ]
+        ]
+    },
+    {
+        "id": "b0f54c94f7288462",
+        "type": "function",
+        "z": "d19b657d65c9ef07",
+        "name": "extraer_humedad",
+        "func": "msg.payload = msg.datos.hr;\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 770,
+        "y": 300,
+        "wires": [
+            [
+                "b43d9b74117b70ad",
+                "aebd33baf867b01c"
+            ]
+        ]
+    },
+    {
+        "id": "e8a7aac38620a15a",
+        "type": "function",
+        "z": "d19b657d65c9ef07",
+        "name": "extraer_presion",
+        "func": "msg.payload = msg.datos.pa;\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 760,
+        "y": 360,
+        "wires": [
+            [
+                "cfe428017e25abf2",
+                "57788a6b495c0b99"
+            ]
+        ]
+    },
+    {
+        "id": "f71a6155c82b9679",
+        "type": "ui_gauge",
+        "z": "d19b657d65c9ef07",
+        "name": "IAQ Index",
+        "group": "292756bfd1135cd9",
+        "order": 1,
+        "width": "4",
+        "height": "4",
+        "gtype": "gage",
+        "title": "IAQ Index",
+        "label": "units",
+        "format": "{{value}}",
+        "min": 0,
+        "max": "250",
+        "colors": [
+            "#00b500",
+            "#f6d32d",
+            "#ca3838"
+        ],
+        "seg1": "85",
+        "seg2": "170",
+        "diff": false,
+        "className": "",
+        "x": 1060,
+        "y": 420,
+        "wires": []
+    },
+    {
+        "id": "0597cdfce1c7ba0b",
+        "type": "function",
+        "z": "d19b657d65c9ef07",
+        "name": "extraer_iaq_index",
+        "func": "// Calcular IAQ Index como promedio de partículas\nvar iaq = (msg.datos.p01 + msg.datos.p25 + msg.datos.p10) / 3;\nmsg.payload = Math.round(iaq);\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 770,
+        "y": 420,
+        "wires": [
+            [
+                "f71a6155c82b9679",
+                "2e1b6286fc6a5e75",
+                "887e34d64b956349"
+            ]
+        ]
+    },
+    {
+        "id": "2e1b6286fc6a5e75",
+        "type": "function",
+        "z": "d19b657d65c9ef07",
+        "name": "determinar_calidad",
+        "func": "// Determinar estado de calidad basado en IAQ\nvar iaq = msg.payload;\n\nif (iaq < 50) {\n    msg.payload = \"good\";\n} else if (iaq < 100) {\n    msg.payload = \"moderate\"; \n} else {\n    msg.payload = \"poor\";\n}\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1070,
+        "y": 480,
+        "wires": [
+            [
+                "898f21ea98508044"
+            ]
+        ]
+    },
+    {
+        "id": "937d3cc1404f28c0",
+        "type": "ui_text_input",
+        "z": "d19b657d65c9ef07",
+        "name": "Callback Period",
+        "label": "Callback Period (ms)",
+        "tooltip": "Ingrese el intervalo en milisegundos (1000-60000)",
+        "group": "3390b419168eaa1e",
+        "order": 2,
+        "width": "0",
+        "height": "0",
+        "passthru": true,
+        "mode": "number",
+        "delay": 300,
+        "topic": "callback_period",
+        "className": "",
+        "topicType": "str",
+        "x": 580,
+        "y": 720,
+        "wires": [
+            [
+                "f8a9b2c3d4e5f601"
+            ]
+        ]
+    },
+    {
+        "id": "b1519e0ca4a0e823",
+        "type": "ui_button",
+        "z": "d19b657d65c9ef07",
+        "name": "Limpiar graficos",
+        "group": "3390b419168eaa1e",
+        "order": 1,
+        "width": "0",
+        "height": "0",
+        "passthru": false,
+        "label": "Limpiar graficos",
+        "tooltip": "",
+        "color": "",
+        "bgcolor": "#0094CE",
+        "className": "",
+        "icon": "",
+        "payload": "",
+        "payloadType": "str",
+        "topic": "limpiar_graficos",
+        "topicType": "msg",
+        "x": 720,
+        "y": 640,
+        "wires": [
+            [
+                "7a53e77f7912c2b4"
+            ]
+        ]
+    },
+    {
+        "id": "898f21ea98508044",
+        "type": "ui_text",
+        "z": "d19b657d65c9ef07",
+        "group": "292756bfd1135cd9",
+        "order": 3,
+        "width": "0",
+        "height": "0",
+        "name": "Estado",
+        "label": "Estado",
+        "format": "{{msg.payload}}",
+        "layout": "row-spread",
+        "className": "",
+        "style": false,
+        "font": "",
+        "fontSize": 20,
+        "color": "#000000",
+        "x": 1260,
+        "y": 480,
+        "wires": []
+    },
+    {
+        "id": "7a53e77f7912c2b4",
+        "type": "function",
+        "z": "d19b657d65c9ef07",
+        "name": "procesar_limpiar",
+        "func": "// Limpiar gráficos\nmsg.payload = [];\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1220,
+        "y": 640,
+        "wires": [
+            [
+                "887e34d64b956349",
+                "57788a6b495c0b99",
+                "aebd33baf867b01c",
+                "475eb6dc47a98dd4"
+            ]
+        ]
+    },
+    {
+        "id": "887e34d64b956349",
+        "type": "ui_chart",
+        "z": "d19b657d65c9ef07",
+        "name": "IAQ Index historico",
+        "group": "292756bfd1135cd9",
+        "order": 2,
+        "width": "0",
+        "height": "0",
+        "label": "",
+        "chartType": "line",
+        "legend": "false",
+        "xformat": "HH:mm:ss",
+        "interpolate": "linear",
+        "nodata": "No hay datos",
+        "dot": false,
+        "ymin": "0",
+        "ymax": "250",
+        "removeOlder": "1",
+        "removeOlderPoints": "",
+        "removeOlderUnit": "3600",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "outputs": 1,
+        "useDifferentColor": false,
+        "className": "",
+        "x": 1070,
+        "y": 540,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "475eb6dc47a98dd4",
+        "type": "ui_chart",
+        "z": "d19b657d65c9ef07",
+        "name": "",
+        "group": "2c1dc4b21d6e4f65",
+        "order": 3,
+        "width": 0,
+        "height": 0,
+        "label": "grafico temperatura",
+        "chartType": "line",
+        "legend": "false",
+        "xformat": "HH:mm",
+        "interpolate": "linear",
+        "nodata": "",
+        "dot": false,
+        "ymin": "0",
+        "ymax": "40",
+        "removeOlder": 1,
+        "removeOlderPoints": "",
+        "removeOlderUnit": "3600",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "outputs": 1,
+        "useDifferentColor": false,
+        "className": "",
+        "x": 1230,
+        "y": 220,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "aebd33baf867b01c",
+        "type": "ui_chart",
+        "z": "d19b657d65c9ef07",
+        "name": "",
+        "group": "2c1dc4b21d6e4f65",
+        "order": 4,
+        "width": 0,
+        "height": 0,
+        "label": "grafico humedad",
+        "chartType": "line",
+        "legend": "false",
+        "xformat": "HH:mm",
+        "interpolate": "linear",
+        "nodata": "",
+        "dot": false,
+        "ymin": "0",
+        "ymax": "100",
+        "removeOlder": 1,
+        "removeOlderPoints": "",
+        "removeOlderUnit": "3600",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "outputs": 1,
+        "useDifferentColor": false,
+        "className": "",
+        "x": 1250,
+        "y": 300,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "57788a6b495c0b99",
+        "type": "ui_chart",
+        "z": "d19b657d65c9ef07",
+        "name": "",
+        "group": "2c1dc4b21d6e4f65",
+        "order": 5,
+        "width": 0,
+        "height": 0,
+        "label": "grafico presion",
+        "chartType": "line",
+        "legend": "false",
+        "xformat": "HH:mm",
+        "interpolate": "linear",
+        "nodata": "",
+        "dot": false,
+        "ymin": "0",
+        "ymax": "920",
+        "removeOlder": 1,
+        "removeOlderPoints": "",
+        "removeOlderUnit": "3600",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "outputs": 1,
+        "useDifferentColor": false,
+        "className": "",
+        "x": 1360,
+        "y": 400,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "f8a9b2c3d4e5f601",
+        "type": "function",
+        "z": "d19b657d65c9ef07",
+        "name": "validar_y_configurar_intervalo",
+        "func": "// Obtener el valor ingresado\nvar periodo = parseInt(msg.payload);\n\n// Validar rango\nif (isNaN(periodo) || periodo < 1000 || periodo > 60000) {\n    node.warn(\"Callback Period debe estar entre 1000 y 60000 ms\");\n    // Valor por defecto si es inválido\n    periodo = 10000;\n}\n\n// Guardar en contexto global\ncontext.global.set(\"callback_period\", periodo);\n\n// Configurar el nodo inject\nmsg.payload = periodo;\nmsg.delay = periodo;\n\nnode.status({fill:\"green\",shape:\"dot\",text:\"Intervalo: \" + periodo + \" ms\"});\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 860,
+        "y": 720,
+        "wires": [
+            [
+                "a1b2c3d4e5f60001"
+            ]
+        ]
+    },
+    {
+        "id": "a1b2c3d4e5f60001",
+        "type": "inject",
+        "z": "d19b657d65c9ef07",
+        "name": "Disparador automático",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "trigger",
+        "payloadType": "str",
+        "x": 1130,
+        "y": 720,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "init_callback_period",
+        "type": "inject",
+        "z": "d19b657d65c9ef07",
+        "name": "Inicializar (10 seg)",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": true,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "10000",
+        "payloadType": "num",
+        "x": 350,
+        "y": 720,
+        "wires": [
+            [
+                "937d3cc1404f28c0"
+            ]
+        ]
+    }
+]

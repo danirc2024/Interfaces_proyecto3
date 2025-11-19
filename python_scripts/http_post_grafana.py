@@ -6,7 +6,8 @@ from generador_datos import generar_datos, mostrar_datos
 import time
 
 # Configuración de InfluxDB (ajusta estos valores a tu instalación)
-token = "cA-Tsn4ki4F4OQ38zppwPrWHxh9aEkPU5_BxV9CWXPKQtAOyqzWv-lKfFLXcBceZXi_Lhez8h0Mp1SlVoo-nFQ=="
+#token = "cA-Tsn4ki4F4OQ38zppwPrWHxh9aEkPU5_BxV9CWXPKQtAOyqzWv-lKfFLXcBceZXi_Lhez8h0Mp1SlVoo-nFQ=="
+token = "eDMeiYiIU1wz1v_HqPH28OEGUZ2FkqjK6LkOtfBil1QRyWMZfxWoR-Wv2FTX4yowMxcU8m6ev2AO-Lob6-52UQ=="
 org = "Mi_organizacion"
 bucket = "Interfaces"
 url = "http://localhost:8086"

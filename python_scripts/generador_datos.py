@@ -18,7 +18,7 @@ def generar_datos():
         'h25': int(np.random.normal(1000, 10, 1)[0]),  # Histograma MP 2.5 um
         'h50': int(np.random.normal(1000, 10, 1)[0]),  # Histograma MP 5.0 um
         'h10': int(np.random.normal(1000, 10, 1)[0]),  # Histograma MP 10 um
-        'timestamp': datetime.now().isoformat()        # Timestamp
+        'timestamp': datetime.utcnow().isoformat() + 'Z'  # Timestamp en UTC
     }
 
 def mostrar_datos(datos):

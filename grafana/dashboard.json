@@ -1,3 +1,745 @@
-# dashboard.json
-# Exportación del dashboard de Grafana
-# TODO: Exportar desde Grafana una vez configurado
+{
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": {
+          "type": "grafana",
+          "uid": "-- Grafana --"
+        },
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "type": "dashboard"
+      }
+    ]
+  },
+  "description": "priemera prueba funcionando, no sabia como guardar 2 cosas buenas de una",
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "id": 1,
+  "links": [],
+  "panels": [
+    {
+      "datasource": {
+        "default": false,
+        "type": "influxdb",
+        "uid": "cf4mh4e41aj28e"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "percentage",
+            "steps": [
+              {
+                "color": "dark-blue",
+                "value": null
+              },
+              {
+                "color": "blue",
+                "value": 1
+              },
+              {
+                "color": "#6ED0E0",
+                "value": 10
+              },
+              {
+                "color": "light-green",
+                "value": 30
+              },
+              {
+                "color": "light-yellow",
+                "value": 50
+              },
+              {
+                "color": "#EF843C",
+                "value": 70
+              },
+              {
+                "color": "red",
+                "value": 90
+              }
+            ]
+          },
+          "unit": "celsius"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 5,
+        "x": 0,
+        "y": 0
+      },
+      "id": 1,
+      "options": {
+        "minVizHeight": 75,
+        "minVizWidth": 75,
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showThresholdLabels": false,
+        "showThresholdMarkers": true,
+        "sizing": "auto",
+        "text": {}
+      },
+      "pluginVersion": "11.2.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "cf4mh4e41aj28e"
+          },
+          "query": "from(bucket: \"Interfaces\")\r\n  |> range(start: -1h)\r\n  |> filter(fn: (r) => r._measurement == \"sensores\")\r\n  |> filter(fn: (r) => r._field == \"te\")",
+          "refId": "A"
+        }
+      ],
+      "title": "Temperatura Ambiental",
+      "type": "gauge"
+    },
+    {
+      "datasource": {
+        "default": false,
+        "type": "influxdb",
+        "uid": "cf4mh4e41aj28e"
+      },
+      "description": "Este grafico muestra en tiempo real como cambia el MP ",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "dark-red",
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": true,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisGridShow": true,
+            "axisLabel": "Frecuencia del MP",
+            "axisPlacement": "right",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineStyle": {
+              "fill": "solid"
+            },
+            "lineWidth": 2,
+            "pointSize": 8,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "always",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "fieldMinMax": false,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "semi-dark-red",
+                "value": null
+              }
+            ]
+          },
+          "unit": "conμgm3"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 11,
+        "x": 5,
+        "y": 0
+      },
+      "id": 11,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "11.2.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "cf4mh4e41aj28e"
+          },
+          "query": "from(bucket: \"Interfaces\")\r\n  |> range(start: -15m)\r\n  |> filter(fn: (r) => r._measurement == \"sensores\")\r\n  |> filter(fn: (r) => r._field == \"p01\")",
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "cf4mh4e41aj28e"
+          },
+          "hide": false,
+          "query": "from(bucket: \"Interfaces\")\r\n  |> range(start: -15m)\r\n  |> filter(fn: (r) => r._measurement == \"sensores\")\r\n  |> filter(fn: (r) => r._field == \"p25\")",
+          "refId": "B"
+        },
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "cf4mh4e41aj28e"
+          },
+          "hide": false,
+          "query": "from(bucket: \"Interfaces\")\r\n  |> range(start: -15m)\r\n  |> filter(fn: (r) => r._measurement == \"sensores\")\r\n  |> filter(fn: (r) => r._field == \"p10\")",
+          "refId": "C"
+        }
+      ],
+      "title": "Grafico Material Particulado 0.1 - 2.5 - 10",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "default": false,
+        "type": "influxdb",
+        "uid": "cf4mh4e41aj28e"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "displayName": "Material Particulado 0.1",
+          "mappings": [],
+          "max": 30,
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "conμgm3"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 7,
+        "x": 17,
+        "y": 0
+      },
+      "id": 9,
+      "options": {
+        "colorMode": "background",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "11.2.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "cf4mh4e41aj28e"
+          },
+          "query": "from(bucket: \"Interfaces\")\r\n  |> range(start: -1h)\r\n  |> filter(fn: (r) => r._measurement == \"sensores\")\r\n  |> filter(fn: (r) => r._field == \"p01\")",
+          "refId": "A"
+        }
+      ],
+      "title": "Grafico MP",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "default": false,
+        "type": "influxdb",
+        "uid": "cf4mh4e41aj28e"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "max": 100,
+          "min": 1,
+          "thresholds": {
+            "mode": "percentage",
+            "steps": [
+              {
+                "color": "text",
+                "value": null
+              },
+              {
+                "color": "super-light-blue",
+                "value": 8
+              },
+              {
+                "color": "light-blue",
+                "value": 19
+              },
+              {
+                "color": "blue",
+                "value": 30
+              },
+              {
+                "color": "dark-blue",
+                "value": 50
+              },
+              {
+                "color": "super-light-purple",
+                "value": 70
+              },
+              {
+                "color": "semi-dark-purple",
+                "value": 90
+              }
+            ]
+          },
+          "unit": "percent"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 5,
+        "x": 0,
+        "y": 5
+      },
+      "id": 3,
+      "options": {
+        "minVizHeight": 75,
+        "minVizWidth": 75,
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showThresholdLabels": false,
+        "showThresholdMarkers": true,
+        "sizing": "auto"
+      },
+      "pluginVersion": "11.2.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "cf4mh4e41aj28e"
+          },
+          "query": "from(bucket: \"Interfaces\")\r\n  |> range(start: -1h)\r\n  |> filter(fn: (r) => r._measurement == \"sensores\")\r\n  |> filter(fn: (r) => r._field == \"hr\")",
+          "refId": "A"
+        }
+      ],
+      "title": "Humedad Relativa",
+      "type": "gauge"
+    },
+    {
+      "datasource": {
+        "default": false,
+        "type": "influxdb",
+        "uid": "cf4mh4e41aj28e"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic-by-name"
+          },
+          "displayName": "Material Particulado 0.1",
+          "mappings": [],
+          "max": 30,
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "conμgm3"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 7,
+        "x": 17,
+        "y": 5
+      },
+      "id": 13,
+      "options": {
+        "colorMode": "background",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "11.2.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "cf4mh4e41aj28e"
+          },
+          "query": "from(bucket: \"Interfaces\")\r\n  |> range(start: -1h)\r\n  |> filter(fn: (r) => r._measurement == \"sensores\")\r\n  |> filter(fn: (r) => r._field == \"p25\")",
+          "refId": "A"
+        }
+      ],
+      "title": "Grafico MP",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "default": false,
+        "type": "influxdb",
+        "uid": "cf4mh4e41aj28e"
+      },
+      "description": "En este grafico se pueden ver los histogramas de los materiales particulados de 01 - 10 m/g^3",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "fieldMinMax": false,
+          "mappings": [],
+          "thresholds": {
+            "mode": "percentage",
+            "steps": [
+              {
+                "color": "dark-green",
+                "value": null
+              },
+              {
+                "color": "dark-green",
+                "value": 20
+              },
+              {
+                "color": "super-light-yellow",
+                "value": 40
+              },
+              {
+                "color": "yellow",
+                "value": 60
+              },
+              {
+                "color": "orange",
+                "value": 80
+              },
+              {
+                "color": "dark-red",
+                "value": 90
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 11,
+        "x": 5,
+        "y": 6
+      },
+      "id": 8,
+      "options": {
+        "displayMode": "gradient",
+        "maxVizHeight": 300,
+        "minVizHeight": 16,
+        "minVizWidth": 8,
+        "namePlacement": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showUnfilled": true,
+        "sizing": "auto",
+        "valueMode": "color"
+      },
+      "pluginVersion": "11.2.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "cf4mh4e41aj28e"
+          },
+          "query": "from(bucket: \"Interfaces\")\r\n  |> range(start: -15m)\r\n  |> filter(fn: (r) => r._measurement == \"sensores\")\r\n  |> filter(fn: (r) => r._field == \"h01\")",
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "cf4mh4e41aj28e"
+          },
+          "hide": false,
+          "query": "from(bucket: \"Interfaces\")\r\n  |> range(start: -15m)\r\n  |> filter(fn: (r) => r._measurement == \"sensores\")\r\n  |> filter(fn: (r) => r._field == \"h03\")",
+          "refId": "B"
+        },
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "cf4mh4e41aj28e"
+          },
+          "hide": false,
+          "query": "from(bucket: \"Interfaces\")\r\n  |> range(start: -15m)\r\n  |> filter(fn: (r) => r._measurement == \"sensores\")\r\n  |> filter(fn: (r) => r._field == \"h05\")",
+          "refId": "C"
+        },
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "cf4mh4e41aj28e"
+          },
+          "hide": false,
+          "query": "from(bucket: \"Interfaces\")\r\n  |> range(start: -15m)\r\n  |> filter(fn: (r) => r._measurement == \"sensores\")\r\n  |> filter(fn: (r) => r._field == \"h01\")",
+          "refId": "D"
+        },
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "cf4mh4e41aj28e"
+          },
+          "hide": false,
+          "query": "from(bucket: \"Interfaces\")\r\n  |> range(start: -15m)\r\n  |> filter(fn: (r) => r._measurement == \"sensores\")\r\n  |> filter(fn: (r) => r._field == \"h25\")",
+          "refId": "E"
+        },
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "cf4mh4e41aj28e"
+          },
+          "hide": false,
+          "query": "from(bucket: \"Interfaces\")\r\n  |> range(start: -15m)\r\n  |> filter(fn: (r) => r._measurement == \"sensores\")\r\n  |> filter(fn: (r) => r._field == \"h50\")",
+          "refId": "F"
+        },
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "cf4mh4e41aj28e"
+          },
+          "hide": false,
+          "query": "from(bucket: \"Interfaces\")\r\n  |> range(start: -15m)\r\n  |> filter(fn: (r) => r._measurement == \"sensores\")\r\n  |> filter(fn: (r) => r._field == \"h10\")",
+          "refId": "G"
+        }
+      ],
+      "title": "Histograma MP 0.1 - 10",
+      "type": "bargauge"
+    },
+    {
+      "datasource": {
+        "default": false,
+        "type": "influxdb",
+        "uid": "cf4mh4e41aj28e"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "continuous-BlYlRd"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "pressurehpa"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 5,
+        "x": 0,
+        "y": 10
+      },
+      "id": 4,
+      "options": {
+        "minVizHeight": 75,
+        "minVizWidth": 75,
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showThresholdLabels": false,
+        "showThresholdMarkers": true,
+        "sizing": "auto"
+      },
+      "pluginVersion": "11.2.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "cf4mh4e41aj28e"
+          },
+          "query": "from(bucket: \"Interfaces\")\r\n  |> range(start: -1h)\r\n  |> filter(fn: (r) => r._measurement == \"sensores\")\r\n  |> filter(fn: (r) => r._field == \"pa\")",
+          "refId": "A"
+        }
+      ],
+      "title": "Presion Atmosferica",
+      "type": "gauge"
+    },
+    {
+      "datasource": {
+        "default": false,
+        "type": "influxdb",
+        "uid": "cf4mh4e41aj28e"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "continuous-YlBl"
+          },
+          "displayName": "Material Particulado 10",
+          "mappings": [],
+          "max": 30,
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "conμgm3"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 7,
+        "x": 17,
+        "y": 10
+      },
+      "id": 14,
+      "options": {
+        "colorMode": "background",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "11.2.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "cf4mh4e41aj28e"
+          },
+          "query": "from(bucket: \"Interfaces\")\r\n  |> range(start: -1h)\r\n  |> filter(fn: (r) => r._measurement == \"sensores\")\r\n  |> filter(fn: (r) => r._field == \"p10\")",
+          "refId": "A"
+        }
+      ],
+      "title": "Grafico MP",
+      "type": "stat"
+    }
+  ],
+  "refresh": "auto",
+  "schemaVersion": 39,
+  "tags": [],
+  "templating": {
+    "list": []
+  },
+  "time": {
+    "from": "now-5m",
+    "to": "now"
+  },
+  "timepicker": {},
+  "timezone": "browser",
+  "title": "FUNCIONO YGRAFICA VAMOO",
+  "uid": "df4mjh9b0vw1sa",
+  "version": 3,
+  "weekStart": ""
+}

@@ -6,6 +6,11 @@ from datetime import datetime
 def generar_datos():
 
     return {
+        
+        #cada valor es random.normal que es una distribución normal con media y desviación estándar
+        #(media, desviación estándar, tamaño) representan los valores simulados de los sensores y el
+        #[0] es para obtener el valor escalar del array generado
+
         'te': int(np.random.normal(20, 2, 1)[0]),      # Temperatura °C
         'hr': int(np.random.normal(70, 2, 1)[0]),      # Humedad relativa %
         'pa': int(np.random.normal(900, 10, 1)[0]),    # Presión atmosférica hPa
@@ -34,3 +39,4 @@ if __name__ == "__main__":
     mostrar_datos(datos)
     print("\nJSON completo:")
     print(json.dumps(datos, indent=2))
+    #json.dumps convierte el diccionario a formato JSON con una indentación de 2 espacios

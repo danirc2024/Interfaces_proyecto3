@@ -1,3 +1,14 @@
-# datasource.yaml
-# Configuración de fuente de datos para Grafana
-# TODO: Configurar según la fuente de datos elegida (InfluxDB, Prometheus, etc.)
+apiVersion: 1
+
+datasources:
+  - name: InfluxDB
+    type: influxdb
+    access: proxy
+    url: http://localhost:8086
+    jsonData:
+      version: Flux
+      organization: Mi_organizacion
+      defaultBucket: Interfaces
+    secureJsonData:
+      token: cA-Tsn4ki4F4OQ38zppwPrWHxh9aEkPU5_BxV9CWXPKQtAOyqzWv-lKfFLXcBceZXi_Lhez8h0Mp1SlVoo-nFQ==
+       #Token de camilo, puede variar dependiendo de quien este trabajando en grafana

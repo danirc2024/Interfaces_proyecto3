@@ -1,7 +1,8 @@
 
 # pip install influxdb-client
 from influxdb_client import InfluxDBClient, Point, WritePrecision
-from influxdb_client.client.write_api import SYNCHRONOUS
+#influxdb-client es la librería oficial para interactuar con InfluxDB desde Python
+from influxdb_client.client.write_api import SYNCHRONOUS #importa la opción de escritura síncrona
 from generador_datos import generar_datos, mostrar_datos
 import time
 
@@ -12,9 +13,10 @@ bucket = "Interfaces"
 url = "http://localhost:8086"
 
 client = InfluxDBClient(url=url, token=token, org=org)
-write_api = client.write_api(write_options=SYNCHRONOUS)
+write_api = client.write_api(write_options=SYNCHRONOUS) #crea una instancia para escribir datos de forma síncrona
+#client.write_api = client.write_api(write_options=SYNCHRONOUS) es para configurar el cliente para usar escritura síncrona
 
-def enviar_a_influxdb(datos):
+def enviar_a_influxdb(datos): 	#point representa un punto de datos en InfluxDB
 	point = Point("sensores") \
 		.field("te", datos["te"]) \
 		.field("hr", datos["hr"]) \
@@ -30,6 +32,7 @@ def enviar_a_influxdb(datos):
 		.field("h10", datos["h10"]) \
 		.time(datos["timestamp"], WritePrecision.NS)
 	write_api.write(bucket=bucket, org=org, record=point)
+	#write_api.write es el método que envía el punto de datos a InfluxDB. y record es el punto de datos a enviar
 	print("✅ Dato enviado a InfluxDB")
 
 if __name__ == "__main__":

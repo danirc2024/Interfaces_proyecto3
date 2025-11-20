@@ -522,7 +522,7 @@
         "order": 2,
         "width": "0",
         "height": "0",
-        "label": "",
+        "label": "Promedio PM",
         "chartType": "line",
         "legend": "false",
         "xformat": "HH:mm:ss",

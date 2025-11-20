@@ -45,7 +45,7 @@ def main():
             # Enviar a NodeRed
             enviar_a_nodered(datos)
             
-            time.sleep(5)
+            time.sleep(1)
             
     except KeyboardInterrupt:
         print("\n🛑 Enviador NodeRed detenido")
